@@ -1,0 +1,162 @@
+CREATE TABLE Persoana(
+id INT NOT NULL,
+nume VARCHAR(30) NOT NULL,
+email VARCHAR(50),
+adresa VARCHAR(100));
+
+CREATE TABLE Deviz(
+id_d INT NOT NULL,
+data_introducere DATE NOT NULL,
+aparat VARCHAR(50) NOT NULL,
+simptome VARCHAR(100) NOT NULL,
+defect VARCHAR(50),
+data_constatare DATE NULL,
+data_finalizare DATE NULL,
+durata INT,
+manopera_ora INT,
+total INT,
+id_client INT NOT NULL,
+id_depanator INT NOT NULL);
+
+CREATE TABLE Piesa(
+id_p INT NOT NULL,
+descriere VARCHAR(100) NOT NULL,
+fabricant VARCHAR(50) NOT NULL,
+cantitate_stoc INT,
+pret_c INT);
+
+CREATE TABLE Piesa_Deviz(
+id_d INT NOT NULL,
+id_p INT NOT NULL,
+cantitate INT NOT NULL,
+pret_r INT NOT NULL);
+
+ALTER TABLE Piesa
+ADD CONSTRAINT uq_descriere_fabricant UNIQUE(descriere, fabricant);
+
+ALTER TABLE Persoana
+ADD CONSTRAINT pk_id PRIMARY KEY (id);
+
+ALTER TABLE Deviz
+ADD CONSTRAINT pk_id_d PRIMARY KEY(id_d);
+
+ALTER TABLE Piesa
+ADD CONSTRAINT pk_id_p PRIMARY KEY(id_p);
+
+ALTER TABLE Piesa_Deviz
+ADD CONSTRAINT pk_id_d_id_p PRIMARY KEY(id_d, id_p);
+
+ALTER TABLE Deviz
+ADD CONSTRAINT fk_id_client FOREIGN KEY(id_client) REFERENCES Persoana(id);
+
+ALTER TABLE Deviz
+ADD CONSTRAINT fk_id_depanator FOREIGN KEY(id_depanator) REFERENCES Persoana(id);
+
+ALTER TABLE Piesa_Deviz
+ADD CONSTRAINT fk_id_p FOREIGN KEY(id_p) REFERENCES Piesa(id_p);
+
+ALTER TABLE Piesa_Deviz
+ADD CONSTRAINT fk_id_d FOREIGN KEY(id_d) REFERENCES Deviz(id_d);
+
+ALTER TABLE Piesa_Deviz
+ADD sursa VARCHAR(50);
+
+ALTER TABLE Persoana
+ADD CONSTRAINT ck_persoana_email CHECK(email LIKE '%@%');
+
+ALTER TABLE Deviz
+ADD CONSTRAINT ck_date CHECK( (data_introducere <= data_constatare 
+AND data_constatare <= data_finalizare) OR ( data_introducere <= data_constatare 
+AND data_finalizare IS NULL) OR (data_constatare IS NULL AND data_constatare IS NULL));
+
+INSERT INTO Persoana VALUES (1, 'Sergio Ramos', 'sergio_ramos@gmail.com', 'Str. Alexandru Vlahuta nr 25C');
+INSERT INTO Persoana VALUES (2, 'Bianca Mihaila', 'biancamihaila07@gmail.com', 'Str. Piata Noua bl G');
+INSERT INTO Persoana VALUES (3, 'Bianca Marin', 'biancamrinbi50@gmail.com', 'Str Sacel nr 34');
+INSERT INTO Persoana VALUES (4, 'George Manolache', 'georgegeoo@yahoo.com', 'Str. Lunga nr 1');
+INSERT INTO Persoana VALUES (5, 'Larisa Tomescu', 'tome_lari@cnog.ro', 'Str. Piata Noua bl J');
+INSERT INTO Persoana VALUES (6, 'Eveline Buta', 'eveebuta01@gmail.com', 'Str. Semaforului nr 102');
+INSERT INTO Persoana VALUES (7, 'Petrica Sandu', 'petrica_petrisor@yahoo.com', 'Str. Cindrelu nr 28');
+INSERT INTO Persoana VALUES (8, 'Grigore Dumitrascu', 'dummy98@yahoo.com', 'Str. Ciresilor nr 33');
+INSERT INTO Persoana VALUES (9, 'Grigore Varlam', 'varlaaam_g@yahoo.com', 'Str Podului nr 10');
+INSERT INTO Persoana VALUES (10, 'Rares Paltineanu', 'raresi00@yahoo.com', 'Str. Tineretului nr 53');
+INSERT INTO Persoana VALUES (11, 'Gabriel Mihaila', 'gabrielmihaila2000@gamil.com', 'Str Daicoviciu nr. 68A');
+INSERT INTO Persoana VALUES (12, 'Alin Baldajar', 'baldi_alin@yahoo.com', 'Str. Magurii nr 2');
+INSERT INTO Persoana VALUES (13, 'Razvan Dumitru', 'razvandumm@yahoo.com', 'Str. Ostirii nr 34B');
+INSERT INTO Persoana VALUES (14, 'Radu Caprita', 'radu_caprita00@gmail.com', 'Str Piotr Ceaikovski nr 10');
+INSERT INTO Persoana VALUES (15, 'Izabela Marginean', 'epaaaiza01@yahoo.com', 'Str. Lazaretului nr 11');
+INSERT INTO Persoana VALUES (16, 'Flavia Vestemean', 'flavia_vestemean@yahoo.com', 'Str. Livezii nr 12A');
+INSERT INTO Persoana VALUES (17, 'Marius Toc', 'marius_toc@yahoo.com', 'Str. Unirii nr 50B');
+INSERT INTO Persoana VALUES (18, 'Tudor Tise', 'tisetudor@gmail.com', 'Str Gheorghe Dima nr 46');
+
+INSERT INTO Deviz VALUES (100, STR_TO_DATE('27-Aug-2019','%e-%b-%Y'), 'Televizor LG', 'imagine blurata', 'pixeli arsi', STR_TO_DATE('28-Aug-2019','%e-%b-%Y'), NULL, NULL, 30, NULL, 2, 3); 
+INSERT INTO Deviz VALUES (101, STR_TO_DATE('17-Aug-2019','%e-%b-%Y'), 'Telefon Samsung', 'ecran fisurat', 'sticla sparta', STR_TO_DATE('28-Aug-2019','%e-%b-%Y'), STR_TO_DATE('29-Aug-2019','%e-%b-%Y'), 3, 30, 140, 6, 1); 
+INSERT INTO Deviz VALUES (102, STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 'Frigider Beko', 'frigider nefunctional', 'motor ars', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('4-Sep-2019','%e-%b-%Y'), 5, 50, 400, 5, 1);
+INSERT INTO Deviz VALUES (103, STR_TO_DATE('26-Aug-2019','%e-%b-%Y'), 'Masina de spalat Electrolux', 'trepidatii la pornire', 'masina neechilibrata', STR_TO_DATE('3-Sep-2019','%e-%b-%Y'), STR_TO_DATE('4-Sep-2019','%e-%b-%Y'), 7, 50, 450, 12, 10);
+INSERT INTO Deviz VALUES (104, STR_TO_DATE('1-Sep-2019','%e-%b-%Y'), 'Laptop HP', 'laptopul se blocheaza', 'guri de aerisire infundate', STR_TO_DATE('2-Sep-2019','%e-%b-%Y'), STR_TO_DATE('5-Sep-2019','%e-%b-%Y'), 2, 20, 50, 3, 18);
+INSERT INTO Deviz VALUES (105, STR_TO_DATE('25-Aug-2019','%e-%b-%Y'), 'Televizor Panasonic', 'scoate fum', 'scurt circuit', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('4-Sep-2019','%e-%b-%Y'), 10, 30, 600, 4, 10);
+INSERT INTO Deviz VALUES (106, STR_TO_DATE('22-Aug-2019','%e-%b-%Y'), 'Telefon Nokia', 'se blocheaza', 'lag', STR_TO_DATE('24-Aug-2019','%e-%b-%Y'), STR_TO_DATE('25-Aug-2019','%e-%b-%Y'), 3, 30, 100, 18, 13);
+INSERT INTO Deviz VALUES (107, STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 'Frigider Electrolux', 'nu raceste', 'fisuri in circuitul cu freon', NULL, NULL, NULL, 40, NULL, 8, 15);
+INSERT INTO Deviz VALUES (108, STR_TO_DATE('2-Sep-2019','%e-%b-%Y'), 'Masina de spalat Bosch', 'zgomote deranjante', 'rulmenti stricati', STR_TO_DATE('2-Sep-2019','%e-%b-%Y'), STR_TO_DATE('3-Sep-2019','%e-%b-%Y'), 5, 50, 300, 10, 13);
+INSERT INTO Deviz VALUES (109, STR_TO_DATE('29-Aug-2019','%e-%b-%Y'), 'Laptop ASUS', 'transfer de date lent', 'hard disk lent', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('1-Sep-2019','%e-%b-%Y'), 3, 30, 150, 5, 1);
+INSERT INTO Deviz VALUES (110, STR_TO_DATE('20-Aug-2019','%e-%b-%Y'), 'Televizor Philips', 'nu se aude sonorul', 'boxa arsa', STR_TO_DATE('22-Aug-2019','%e-%b-%Y'), STR_TO_DATE('24-Aug-2019','%e-%b-%Y'), 2, 50, 150, 14, 16);
+INSERT INTO Deviz VALUES (111, STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 'Telefon Iphone', 'nu se aude sonorul', 'difuzor defect', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('2-Sep-2019','%e-%b-%Y'), 3, 50, 200, 15, 1);
+INSERT INTO Deviz VALUES (112, STR_TO_DATE('28-Aug-2019','%e-%b-%Y'), 'Frigider Arctic', 'scoate sunete deranjante', 'murdarie pe piese', STR_TO_DATE('29-Aug-2019','%e-%b-%Y'), STR_TO_DATE('1-Sep-2019','%e-%b-%Y'), 4, 25, 150, 5, 17);
+INSERT INTO Deviz VALUES (113, STR_TO_DATE('28-Aug-2019','%e-%b-%Y'), 'Masina de spalat AEG', 'nu porneste', 'furtun de apa infundat', STR_TO_DATE('29-Aug-2019','%e-%b-%Y'), STR_TO_DATE('30-Sep-2019','%e-%b-%Y'), 1, 50, 100, 18, 13);
+INSERT INTO Deviz VALUES (114, STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 'Laptop Apple', 'se descarca repede', 'baterie defecta', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('2-Sep-2019','%e-%b-%Y'), 4, 25, 150, 9, 10);
+INSERT INTO Deviz VALUES (115, STR_TO_DATE('4-Sep-2019','%e-%b-%Y'), 'Televizor Sony', 'imagine decolorata', 'placa video stricata', STR_TO_DATE('5-Sep-2019','%e-%b-%Y'), STR_TO_DATE('5-Sep-2019','%e-%b-%Y'), 2, 50, 150, 2, 1);
+INSERT INTO Deviz VALUES (116, STR_TO_DATE('20-Aug-2019','%e-%b-%Y'), 'Telefon Oppo', 'imagine desincronizata', 'spixeli arsi', STR_TO_DATE('21-Aug-2019','%e-%b-%Y'), STR_TO_DATE('25-Aug-2019','%e-%b-%Y'), 6, 20, 200, 7, 3);
+INSERT INTO Deviz VALUES (117, STR_TO_DATE('25-Sep-2019','%e-%b-%Y'), 'Frigider Heinner', 'termostat nefunctional', 'termostat ars', STR_TO_DATE('27-Sep-2019','%e-%b-%Y'), STR_TO_DATE('29-Sep-2019','%e-%b-%Y'), 5, 50, 450, 12, 18);
+INSERT INTO Deviz VALUES (118, STR_TO_DATE('17-Aug-2019','%e-%b-%Y'), 'Masina de spalat Samsung', 'nu functioneaza', 'selector de programe defect', STR_TO_DATE('18-Aug-2019','%e-%b-%Y'), STR_TO_DATE('19-Aug-2019','%e-%b-%Y'), 4, 50, 300, 11, 18);
+INSERT INTO Deviz VALUES (119, STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 'Laptop Dell', 'taste lipsa', 'defectiune tastatura', STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), STR_TO_DATE('30-Aug-2019','%e-%b-%Y'), 1, 10, 40, 3, 17);
+INSERT INTO Deviz VALUES (120, STR_TO_DATE('15-Sep-2019','%e-%b-%Y'), 'Televizor Horizon', 'lipsa alimentara curent', 'cablu stricat', STR_TO_DATE('17-Sep-2019','%e-%b-%Y'), STR_TO_DATE('19-Sep-2019','%e-%b-%Y'), 3, 50, 200, 8, 16);
+INSERT INTO Deviz VALUES (121, STR_TO_DATE('10-Aug-2019','%e-%b-%Y'), 'Telefon OnePlus', 'camera nu functioneaza', 'apa in interiorul camerei', STR_TO_DATE('11-Aug-2019','%e-%b-%Y'), STR_TO_DATE('12-Aug-2019','%e-%b-%Y'), 3, 50, 200, 5, 13);
+INSERT INTO Deviz VALUES (122, STR_TO_DATE('7-Aug-2019','%e-%b-%Y'), 'Frigider Indesit', 'se supraincalzeste', 'freon spart', STR_TO_DATE('31-Aug-2019','%e-%b-%Y'), STR_TO_DATE('4-Sep-2019','%e-%b-%Y'), 1, 50, 100, 5, 17);
+
+INSERT INTO Piesa VALUES (1, 'piulita', 'Prodadri', 10, 5);
+INSERT INTO Piesa VALUES (2, 'placuta', 'Prod Wild', 3, 125);
+INSERT INTO Piesa VALUES (3, 'surub', 'Caroprism', 20, 15);
+INSERT INTO Piesa VALUES (4, 'display', 'Caro Plum', 10, 40);
+INSERT INTO Piesa VALUES (5, 'termostat', 'Duo Avro', 2, 205);
+INSERT INTO Piesa VALUES (6, 'furtun', 'Metro', 7, 45);
+INSERT INTO Piesa VALUES (7, 'folie', 'Spire', 10, 40);
+INSERT INTO Piesa VALUES (8, 'difuzor', 'Bloom', 2, 55);
+INSERT INTO Piesa VALUES (9, 'tabla', 'Prod Factory', 50, 50);
+INSERT INTO Piesa VALUES (10, 'taste', 'Arid', 20, 15);
+INSERT INTO Piesa VALUES (11, 'motoras', 'Lazer', 4, 150);
+INSERT INTO Piesa VALUES (12, 'piulita', 'Prod Wild', 20, 7);
+INSERT INTO Piesa VALUES (13, 'tabla', 'Caro Plum', 3, 40);
+INSERT INTO Piesa VALUES (14, 'rulmenti', 'Prod Wild', 3, 60);
+INSERT INTO Piesa VALUES (15, 'freon', 'Prod Wild', 7, 55);
+INSERT INTO Piesa VALUES (16, 'hard disk', 'Metro', 2, 70);
+INSERT INTO Piesa VALUES (17, 'cablu', 'Prod Wild', 3, 40);
+INSERT INTO Piesa VALUES (18, 'cuie', 'Metro', 30, 11);
+
+INSERT INTO Piesa_Deviz VALUES (101, 4, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (102, 11, 1, 150, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (103, 13, 2, 50, 'Leroy Merlin');
+INSERT INTO Piesa_Deviz VALUES (104, 3, 1, 10, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (105, 3, 5, 10, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (105, 12, 5, 10, 'Leroy Merlin');
+INSERT INTO Piesa_Deviz VALUES (105, 17, 2, 50, 'Dedeman');
+INSERT INTO Piesa_Deviz VALUES (105, 4, 2, 50, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (106, 1, 1, 10, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (108, 14, 1, 50, 'Dedeman');
+INSERT INTO Piesa_Deviz VALUES (109, 16, 1, 60, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (110, 8, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (111, 8, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (112, 1, 2, 10, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (112, 3, 2, 10, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (112, 10, 1, 10, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (113, 6, 1, 50, 'Dedeman');
+INSERT INTO Piesa_Deviz VALUES (114, 4, 1, 50, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (115, 4, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (116, 4, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (117, 5, 1, 200, 'Dedeman');
+INSERT INTO Piesa_Deviz VALUES (118, 2, 1, 100, 'Leroy Merlin');
+INSERT INTO Piesa_Deviz VALUES (119, 10, 3, 10, 'EMAG');
+INSERT INTO Piesa_Deviz VALUES (120, 17, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (121, 4, 1, 50, 'Altex');
+INSERT INTO Piesa_Deviz VALUES (122, 15, 1, 50, 'Dedeman');
+
+
+

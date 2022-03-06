@@ -1,0 +1,6 @@
+BEGIN
+	SELECT *
+    FROM piesa
+    WHERE cantitate_stoc < $cantitate
+    ORDER BY cantitate_stoc, descriere;
+END
